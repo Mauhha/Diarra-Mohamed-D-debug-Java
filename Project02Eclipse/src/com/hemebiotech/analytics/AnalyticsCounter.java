@@ -1,43 +1,40 @@
 package com.hemebiotech.analytics;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class AnalyticsCounter {
-	private static int headacheCount = 0;
-	private static int rashCount = 0;
-	private static int dialatedpupilCount = 0;
-	
-	public static void main(String[] args) throws Exception {
-		// first get input
-		BufferedReader reader = new BufferedReader (new FileReader("Project02Eclipse/symptoms.txt"));
-		String line = reader.readLine();
+
+	public ReadSymptomDataFromFile reader;
+
+	public WriteSymptomDataToFile writer;
 
 
-		while (line != null) {
-			System.out.println("symptom from file: " + line);
-			if (line.equals("headache")) {
-				headacheCount++;
-				System.out.println("number of headaches: " + headacheCount);
-			}
-			else if (line.equals("rash")) {
-				rashCount++;
-			}
-			else if (line.contains("dialated pupils")) {
-				dialatedpupilCount++;
-			}
-
-			line = reader.readLine();	// get another symptom
-		}
-		
-		// writer implementation test
-		WriteSymptomDataToFile writeSymptomDataToFile = new WriteSymptomDataToFile("result.out");
-		Map<String,Integer> map = new TreeMap<>();
-		map.put("headache",headacheCount);
-		map.put("rash",rashCount);
-		map.put("dialated pupils",dialatedpupilCount);
-		writeSymptomDataToFile.writeSymptoms(map);
+	public AnalyticsCounter(ReadSymptomDataFromFile reader, WriteSymptomDataToFile writer) {
+		this.reader = reader;
+		this.writer = writer;
 	}
+
+	public List<String> getSymptoms(){
+		return reader.GetSymptoms();
+	}
+
+	public Map<String, Integer> countSymptoms(List<String> symptoms) {
+		Map<String, Integer> countedSymptoms = new HashMap<>();
+		for (String symptom : symptoms) {
+			countedSymptoms.computeIfPresent(symptom, (k, v) -> ++v);
+			countedSymptoms.computeIfAbsent(symptom, k -> 1);
+		}
+		return countedSymptoms;
+	}
+
+	public Map<String, Integer> sortSymptoms(Map<String, Integer> symptoms) {
+		return new TreeMap<>(symptoms);
+	}
+
+	public void writeSymptoms(Map<String, Integer> symptoms) {
+		writer.writeSymptoms(symptoms);
+	}
+
+
 }
+
