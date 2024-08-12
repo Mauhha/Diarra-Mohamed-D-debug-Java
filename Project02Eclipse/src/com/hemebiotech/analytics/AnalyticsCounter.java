@@ -2,7 +2,8 @@ package com.hemebiotech.analytics;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.FileWriter;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class AnalyticsCounter {
 	private static int headacheCount = 0;
@@ -31,11 +32,12 @@ public class AnalyticsCounter {
 			line = reader.readLine();	// get another symptom
 		}
 		
-		// next generate output
-		FileWriter writer = new FileWriter ("result.out");
-		writer.write("headache: " + headacheCount + "\n");
-		writer.write("rash: " + rashCount + "\n");
-		writer.write("dialated pupils: " + dialatedpupilCount + "\n");
-		writer.close();
+		// writer implementation test
+		WriteSymptomDataToFile writeSymptomDataToFile = new WriteSymptomDataToFile("result.out");
+		Map<String,Integer> map = new TreeMap<>();
+		map.put("headache",headacheCount);
+		map.put("rash",rashCount);
+		map.put("dialated pupils",dialatedpupilCount);
+		writeSymptomDataToFile.writeSymptoms(map);
 	}
 }
