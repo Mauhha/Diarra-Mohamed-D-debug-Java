@@ -2,6 +2,9 @@ package com.hemebiotech.analytics;
 
 import java.util.*;
 
+/**
+ * The AnalyticsCounter class provides functionalities to compute symptom data.
+ */
 public class AnalyticsCounter {
 
 	/**
